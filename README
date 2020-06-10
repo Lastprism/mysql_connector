@@ -1,0 +1,56 @@
+mysql_connector数据库连接类
+    成员变量
+        conn是一个unique_ptr<MYSQL>的指针，用来管理数据库连接，可以自动释放连接，无需手动释放。
+        server是代待连接的ip
+        user是数据库用户
+        password是密码
+        database是数据库
+        port是端口，默认使用0
+        is_conn是是否连接
+    成员函数
+        构造函数有两个，有参数的用来赋值，没参数的构造函数默认构造一个连接器，注意构造函数并不连接数据库
+        connect_to函数用于连接数据库，无参版本使用构造函数传递的参数连接，有参版本使用传递的参数作为连接参数，
+            如果构造函数没有传递参数，connect_to也没有传递参数，结果未定义。连接成功返回0，否则1
+        query用于执行sql，结果使用vector<vector<string>>保存，使用vector<string>保存一条数据，
+            每个字段作为一个string存储。该函数返回一个pair，first是结果，second是int，0表示查询成功，1表示查询失败
+        close用于关闭连接
+        error用于查询错误
+        is_connected查询当前是否处于连接状态
+        该类不支持复制构造和赋值，支持移动
+
+
+thread_pool一个用于执行sql语句的线程池(任务队列)
+    成员变量
+        pool_size线程数量
+        workers用于存放线程的vector，用于析构的时候join线程
+        tasks，存放待执行sql队列
+        mx互斥量
+        cv条件变量
+        stop，停止变量
+    成员函数
+        构造函数，第一个参数时大小，后面的是数据库配置
+        push，添加一条sql到任务队列
+        terminal，停止线程池里的所有变量，调用termina之后不要在添加任务，未定义行为
+        is_stop是否已经停止
+        该类不支持复制,移动构造和复制
+
+
+example里有使用样例
+
+cmake编译
+    新建个build文件夹
+    cmake .. -G"MinGW Makefiles"
+    cmake --build .
+
+手动编译
+    g++ example.cpp mysql_connector.cpp thread_pool.cpp -I./include -L./lib -llibmysql -std=c++11 -o example.exe
+    g++ example.cpp mysql_connector.cpp thread_pool.cpp -Iinclude -Llib -llibmysql -std=c++11 -o example.exe
+
+
+运行时要把example.exe和lib目录下的libmysql.dll动态库放到同一路径下才能运行
+
+create table t1(id int);
+
+如果不想输出调试信息，可以注释掉thread_pool.cpp line 10/31的输出信息
+thread_poll.cpp line 34是错误信息，如果不需要也可以删除
+thread_pool.cpp line 35/36控制出现错误是结束程序还是忽略错误
