@@ -42,8 +42,10 @@ std::pair<std::vector< std::vector<std::string> >, int> mysql_connector::query(c
         vector<string> tmprow;
         int fields_num = mysql_num_fields(res.get());
 
-        for (int i = 0;i<fields_num;i++){
-            tmprow.push_back(row[i]);
+        unsigned long *pLens = mysql_fetch_lengths(res.get());
+
+        for (int i = 0; i<fields_num; i++){
+            tmprow.emplace_back(row[i], row[i]+pLens[i]);
         }
 
         result.push_back(tmprow);

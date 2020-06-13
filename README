@@ -54,3 +54,8 @@ create table t1(id int);
 如果不想输出调试信息，可以注释掉thread_pool.cpp line 10/31的输出信息
 thread_poll.cpp line 34是错误信息，如果不需要也可以删除
 thread_pool.cpp line 35/36控制出现错误是结束程序还是忽略错误
+
+
+
+1.1
+    修复了如果字段中存在'\0'，读取的时候会截断的问题。
