@@ -56,6 +56,8 @@ public:
 
     int is_stop(){return stop;}
 
+    int taskSize();
+
     ~thread_pool(){
         if(!stop){
             terminal();
