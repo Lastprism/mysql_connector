@@ -69,3 +69,12 @@ DEBUG编译会输出错误信息，编译时添加MYSQL_CONNECTOR_ERROR宏会输
 
 1.4
 	在mysql_connector添加了转义函数，处理blob类型的数据
+
+
+2.0
+	使用协程。测试了一下速度。只能使用vs编译，windows下无法使用其他编译器编译。而且使用协程存在问题，executor中的函数只能全写在头文件里。
+	否则会出现奇奇怪怪的问题。
+		测试时是本地电脑连接远程数据库服务器
+			20个协程每秒执行500条"insert into test_blob values('aaaaa\0aaaaa')"没问题
+			20个线程每秒执行500条"insert into test_blob values('aaaaa\0aaaaa')"没问题
+			都没有执行1000条的速度

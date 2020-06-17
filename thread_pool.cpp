@@ -9,7 +9,7 @@
 void thread_pool::push(string sql){
     std::lock_guard<mutex> lk(mx);
 {
-std::cout << "push [" << sql << "] into tasks" << std::endl;
+//std::cout << "push [" << sql << "] into tasks" << std::endl;
 //fprintf(stdout, "push [%s] into tasks\n", sql.c_str());
 }
     tasks.push(move(sql));
@@ -32,24 +32,21 @@ void thread_pool::work(pmysql_connector pmc){
             tasks.pop();
         }
 
-{
-std::lock_guard<mutex> lk(mx);
-std::cout << "thread"<< std::this_thread::get_id << " execute sql [" << sql << "]" << std::endl;
-}
+//{
+//std::lock_guard<mutex> lk(mx);
+//std::cout << "thread"<< std::this_thread::get_id << " execute sql [" << sql << "]" << std::endl;
+//}
 
 //fprintf(stdout, "thread%d execute sql [%s]\n", std::this_thread::get_id(), sql.c_str());
         auto ans = pmc->query(sql);
         if(ans.second != 0){
 
-
-
 {
 std::lock_guard<mutex> lk(mx);
 std::cerr << "thread" << std::this_thread::get_id() << "query error : " << ans.second << ", " << pmc->error() << std::endl;
+//fprintf(stderr, "thread%d query error : %d, %s\n", std::this_thread::get_id(), ans.second, pmc->error().c_str());
 }
 
-
-//fprintf(stderr, "thread%d query error : %d, %s\n", std::this_thread::get_id(), ans.second, pmc->error().c_str());
             //exit(0);
             return;
         }
@@ -67,7 +64,7 @@ void thread_pool::terminal(){
     }
 }
 
-inline int thread_pool::taskSize(){
+int thread_pool::taskSize(){
     std::lock_guard<mutex> lk(mx);
     return tasks.size();
 }
