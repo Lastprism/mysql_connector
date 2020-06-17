@@ -78,3 +78,6 @@ DEBUG编译会输出错误信息，编译时添加MYSQL_CONNECTOR_ERROR宏会输
 			20个协程每秒执行500条"insert into test_blob values('aaaaa\0aaaaa')"没问题
 			20个线程每秒执行500条"insert into test_blob values('aaaaa\0aaaaa')"没问题
 			都没有执行1000条的速度
+
+2.1
+	修改数据库配置(失误)
