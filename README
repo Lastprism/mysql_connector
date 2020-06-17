@@ -69,3 +69,6 @@ DEBUG编译会输出错误信息，编译时添加MYSQL_CONNECTOR_ERROR宏会输
 
 1.4
 	在mysql_connector添加了转义函数，处理blob类型的数据
+
+1.5 
+	修改example.cpp里面的参数。(失误)
