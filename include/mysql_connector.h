@@ -63,6 +63,9 @@ public:
         return mysql_error(conn.get());
     }
 
+	int escapeString(const string &data, string &res);
+	int escapeString(const char* data, int dataSize, string& res);
+
     bool is_connected(){return is_conn;}
 
 };
